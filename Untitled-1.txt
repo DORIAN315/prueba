@@ -1,0 +1,26 @@
+SELECT MAX( CAST( tm.spacing AS SIGNED ) ) AS MAXVAL
+                , tm.gln
+                , tm.trademark
+                , tm.category
+                , tm.supplier
+                , tm.salepoint
+                , COUNTRY.namecountry AS namecountry
+                , tm.client
+                , tm.channel
+                , tm.format
+                , YEAR(tm.polldate) as year
+                , MONTH(tm.polldate) as month
+                FROM tbls_reportsdata tm
+                INNER JOIN tblint_countries COUNTRY
+                ON COUNTRY.id = tm.countryid
+                WHERE
+                tm.supplier IN ('UNILEVER', 'MERCADO')
+                AND tm.spacing != ''
+                AND COUNTRY.namecountry in ('COSTARICA')
+                AND YEAR(tm.polldate) in ('2018')
+                AND MONTH(tm.polldate) in ('9')
+                AND tm.format in ('HIPER')
+                AND tm.category in ('DEOS','DOVE BABY','DRESSINGS','FACE','HAIR','HAND & BODY','HAND_AND_BODY','MEAL DISHES','MULTICATEGORÍA','SALSAS OSCURAS','SKIN CLEANSING','SOLUTION WASH','SPREADS','TBP')
+                AND tm.client in ('WM')
+                AND tm.trademark NOT IN ('MULTIMARCA', 'MULTICATEGORIA', 'SW', 'FRUCO_DELI', 'DRESSINGS_BASEMAYONESA')
+                GROUP BY tm.gln, tm.trademark, MONTH(tm.polldate)
